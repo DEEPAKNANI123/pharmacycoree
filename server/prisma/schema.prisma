@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  role          String   @default("patient")
+  address       String?
+  phone         String?
+  password      String?
+  familyMembers String[]
+  orders        Order[]
+  rxSubmissions RxSubmission[]
+}
+
+model Medicine {
+  id              String   @id @default(uuid())
+  name            String
+  sku             String
+  stripSku        String?
+  category        String
+  batch           String?
+  expiryDate      String?
+  price           Float
+  stripPrice      Float?
+  purchasePrice   Float
+  stock           Int      @default(0)
+  stripStock      Int      @default(0)
+  pieceStock      Int      @default(0)
+  unitsPerBox     Int      @default(1)
+  piecesPerStrip  Int      @default(10)
+  piecePrice      Float?
+  reorderPoint    Int?
+  storage         String?
+  isPerishable    Boolean  @default(false)
+  orderItems      OrderItem[]
+  transactionItems TransactionItem[]
+}
+
+model Customer {
+  id           String   @id @default(uuid())
+  name         String
+  phone        String
+  email        String?
+  emiratesId   String?
+  rewardPoints Int      @default(0)
+  lastVisit    String?
+}
+
+model Order {
+  id            String   @id @default(uuid())
+  userId        String
+  user          Profile  @relation(fields: [userId], references: [id])
+  subtotal      Float
+  vat           Float
+  total         Float
+  status        String   @default("Order Placed")
+  deliveryType  String   @default("Standard")
+  paymentMethod String   @default("Card")
+  createdAt     DateTime @default(now())
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id            String   @id @default(uuid())
+  orderId       String
+  order         Order    @relation(fields: [orderId], references: [id])
+  medicineId    String
+  medicine      Medicine @relation(fields: [medicineId], references: [id])
+  name          String
+  quantity      Int
+  price         Float
+  purchasePrice Float
+}
+
+model Transaction {
+  id            String   @id @default(uuid())
+  subtotal      Float
+  vat           Float
+  total         Float
+  paymentMethod String   @default("Cash")
+  customerId    String?
+  cashierId     String?
+  createdAt     DateTime @default(now())
+  items         TransactionItem[]
+}
+
+model TransactionItem {
+  id            String      @id @default(uuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  medicineId    String
+  medicine      Medicine    @relation(fields: [medicineId], references: [id])
+  name          String
+  quantity      Int
+  price         Float
+  purchasePrice Float
+}
+
+model RxSubmission {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                Profile   @relation(fields: [userId], references: [id])
+  imageUrl            String
+  status              String    @default("Reviewing")
+  rejectionReason     String?
+  associatedMedicines String[]
+  isRefill            Boolean   @default(false)
+  processedAt         DateTime?
+  pickedUpAt          DateTime?
+  returnedToStockAt   DateTime?
+  createdAt           DateTime  @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  details   String
+  createdAt DateTime @default(now())
+}
