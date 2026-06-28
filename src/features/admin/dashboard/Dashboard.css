@@ -1,0 +1,236 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.dashboard-header {
+  margin-bottom: var(--space-2);
+}
+
+.dashboard-header h1 {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.metric-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.metric-card {
+  padding: var(--space-5);
+}
+
+.metric-title {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.metric-subtitle {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-danger); }
+.metric-card.panel.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.metric-card.panel.clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--color-primary-light);
+}
+
+.panel.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.panel.clickable:hover {
+  border-color: var(--color-primary-light);
+  background-color: #fafafa;
+}
+
+.link-style-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.link-style-btn:hover {
+  text-decoration: underline;
+}
+
+.bg-primary { background-color: var(--color-primary); }
+.bg-success { background-color: var(--color-success); }
+.bg-warning { background-color: var(--color-warning); }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-6);
+}
+
+.panel-header {
+  margin-bottom: var(--space-5);
+}
+
+.panel-header h3 {
+  font-size: 1rem;
+}
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.alert-item .badge {
+  min-width: 80px;
+  justify-content: center;
+}
+
+.alert-content h4 {
+  font-size: 0.875rem;
+  margin-bottom: 0.2rem;
+  color: var(--color-text-main);
+}
+
+.alert-content p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.sales-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.sales-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-bg-app);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+.dashboard-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.dashboard-bottom .panel {
+  padding: var(--space-4) var(--space-5);
+}
+
+.dashboard-bottom h3 {
+  font-size: 0.875rem;
+}
+
+.insights-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.insights-panel {
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  background: white;
+  padding: 2.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.report-content h2, .report-content h3 {
+  color: var(--color-primary);
+  font-family: inherit;
+}
+
+.report-content p {
+  line-height: 1.6;
+  color: var(--color-text-main);
+}
+
+.report-content li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.bg-danger-light {
+  background-color: #fef2f2;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+

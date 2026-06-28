@@ -1,0 +1,76 @@
+.treasury-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.treasury-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.treasury-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.treasury-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.treasury-panel {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.treasury-list-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.25rem;
+}
+
+/* Refined, clean list items */
+.cash-item, .upcoming-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cash-item:last-child, .upcoming-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cash-item:first-child, .upcoming-item:first-child {
+  padding-top: 0;
+}
+
+.amount-pos { 
+  color: #16a34a; 
+  font-weight: 600; 
+  font-size: 0.85rem;
+}
+.amount-neg { 
+  color: #dc2626; 
+  font-weight: 600; 
+  font-size: 0.85rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

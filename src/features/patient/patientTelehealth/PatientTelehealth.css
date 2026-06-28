@@ -1,0 +1,187 @@
+.telehealth-container {
+    padding: 1rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.telehealth-header {
+    margin-bottom: 3rem;
+}
+
+.telehealth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+}
+
+.doctor-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.doctor-card:hover {
+    background: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    border-color: #e2e8f0;
+}
+
+.doctor-card.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+}
+
+.doc-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.doctor-card.active .doc-avatar {
+    background: #3b82f6;
+    color: white;
+}
+
+.radio-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.doctor-card.active .radio-circle {
+    border-color: #3b82f6;
+    background: #3b82f6;
+}
+
+.doctor-card.active .radio-circle::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.calendar-week-slider {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: -1rem; /* counteract padding */
+}
+
+.calendar-week-slider::-webkit-scrollbar {
+    height: 4px;
+}
+
+.calendar-week-slider::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.date-card {
+    min-width: 75px;
+    height: 90px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-card:hover {
+    background: white;
+    border-color: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.date-card.active {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+}
+
+.date-day {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.date-num {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-top: 0.25rem;
+}
+
+.time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.time-slot-btn {
+    padding: 0.85rem;
+    border-radius: 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.time-slot-btn:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.time-slot-btn.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #3b82f6;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.1);
+}
+
+.booking-summary {
+    border-top: 1px dashed #cbd5e1;
+    padding-top: 2rem;
+}
+
+.success-pulse-circle {
+    width: 150px;
+    height: 150px;
+    background: #ecfdf5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-success 2s infinite;
+}
+
+@keyframes pulse-success {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { box-shadow: 0 0 0 30px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
