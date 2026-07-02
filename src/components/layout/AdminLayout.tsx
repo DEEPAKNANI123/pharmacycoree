@@ -22,7 +22,9 @@ export default function AdminLayout() {
       <div className="admin-main">
         <AdminHeader title={title} />
         <div className="admin-content" style={{ backgroundColor: 'var(--color-bg-app)' }}>
-          <Outlet />
+          <div className="admin-page-container">
+            <Outlet />
+          </div>
         </div>
       </div>
       <GlobalCartDrawer />
