@@ -11,9 +11,7 @@ export default function Dashboard() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [report, setReport] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-
+  const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY;
   const today = new Date();
   
   const isExpiringSoon = (dateStr: string) => {
@@ -253,14 +251,16 @@ export default function Dashboard() {
     };
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`
+          'Authorization': `Bearer ${API_KEY}`,
+          'HTTP-Referer': 'http://localhost:5173',
+          'X-Title': 'PharmaCore'
         },
         body: JSON.stringify({
-          model: 'gpt-4o',
+          model: 'openai/gpt-4o',
           messages: [
             {
               role: "system",
@@ -317,7 +317,7 @@ export default function Dashboard() {
       </div>
 
       <div className="metric-cards">
-        <div className="metric-card panel clickable" onClick={() => navigate('/admin/pos')}>
+        <div className="metric-card panel clickable" onClick={() => navigate('/admin/revenue')}>
           <p className="metric-title">Today's Revenue</p>
           <h2 className="metric-value">AED {formatCurrency(revenueToday)}</h2>
           <div className="flex-between text-xs mt-1">
@@ -791,58 +791,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="panel" style={{ marginTop: '1.5rem', marginBottom: '1.5rem', overflowX: 'auto' }}>
-        <div className="panel-header flex-between">
-          <h3>Daily Transactions</h3>
-          <span className="badge badge-primary">{todayTransactions.length} Transactions Today</span>
-        </div>
-        <table className="table" style={{ width: '100%', marginTop: '1rem', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
-          <thead>
-            <tr style={{ borderBottom: '2px solid var(--color-border)', textAlign: 'left' }}>
-              <th style={{ padding: '0.75rem' }}>Transaction ID</th>
-              <th style={{ padding: '0.75rem' }}>Time</th>
-              <th style={{ padding: '0.75rem' }}>Tracking (Cashier/Customer)</th>
-              <th style={{ padding: '0.75rem' }}>Items</th>
-              <th style={{ padding: '0.75rem' }}>Payment Method</th>
-              <th style={{ padding: '0.75rem', textAlign: 'right' }}>Total (AED)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {todayTransactions.slice(0, 10).map((t, index) => (
-              <tr key={index} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>{t.id}</td>
-                <td style={{ padding: '0.75rem' }}>{new Date(t.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                <td style={{ padding: '0.75rem' }}>
-                  <div style={{ fontSize: '0.8rem' }}>
-                    <span className="text-muted block">Cashier: </span> {t.cashierId || 'Unknown'}
-                  </div>
-                  <div style={{ fontSize: '0.8rem' }}>
-                    <span className="text-muted block">Customer: </span> {t.customerId || 'Walk-in'}
-                  </div>
-                </td>
-                <td style={{ padding: '0.75rem' }}>{t.items?.length || 0} items</td>
-                <td style={{ padding: '0.75rem' }}>
-                  <span className="badge" style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text-main)' }}>
-                    {/* @ts-ignore */}
-                    {t.paymentMethod || 'Unknown'}
-                  </span>
-                </td>
-                <td style={{ padding: '0.75rem', textAlign: 'right', fontWeight: 'bold' }}>AED {formatCurrency(t.total)}</td>
-              </tr>
-            ))}
-            {todayTransactions.length === 0 && (
-              <tr>
-                <td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: 'var(--color-text-muted)' }}>No transactions recorded today.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        {todayTransactions.length > 10 && (
-           <div className="text-center mt-3">
-             <button className="text-primary text-sm font-medium link-style-btn" onClick={() => navigate('/admin/pos')}>View all {todayTransactions.length} transactions in POS →</button>
-           </div>
-        )}
-      </div>
+
 
       {report && (
          <div className="insights-overlay">
