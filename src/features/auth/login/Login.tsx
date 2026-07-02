@@ -1,24 +1,55 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ShieldPlus, User, Lock, Mail, ChevronRight, UserPlus, CheckCircle, Smartphone, Globe, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ShieldPlus, User, Lock, Mail, ChevronRight, UserPlus, CheckCircle, Smartphone, Globe, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import { useDatabase } from '../../../context/DatabaseContext';
 import './Login.css';
 
 export default function Login() {
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isSignup = location.pathname === '/signup';
+  
+  const [mode, setMode] = useState<'login' | 'signup'>(isSignup ? 'signup' : 'login');
+  
+  useEffect(() => {
+    setMode(location.pathname === '/signup' ? 'signup' : 'login');
+  }, [location.pathname]);
+
   const [role, setRole] = useState<'admin' | 'patient'>('patient');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('patient@example.com');
+  const [password, setPassword] = useState('patient123');
   const [name, setName] = useState('');
+  const [countryCode, setCountryCode] = useState('+971');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const { login, signup } = useDatabase();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (mode === 'signup') {
+      if (!/^[A-Za-z\s]+$/.test(name)) {
+        setError('Name must contain only alphabetical characters');
+        return;
+      }
+      if (!/^\d{9,12}$/.test(phone)) {
+        setError('Phone number must be between 9 and 12 numeric digits');
+        return;
+      }
+      if (!email.toLowerCase().endsWith('@gmail.com')) {
+        setError('Email must be in @gmail.com format');
+        return;
+      }
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_-]).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        setError('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -33,7 +64,8 @@ export default function Login() {
           setError('Authentication failed. Please check your credentials.');
         }
       } else {
-        const success = await signup({ email, name, role, phone }, password);
+        const fullPhone = `${countryCode} ${phone}`;
+        const success = await signup({ email, name, role, phone: fullPhone }, password);
         if (success) {
           setMode('login');
           setError('Account created! Please check your email for a confirmation link (if enabled) and then sign in.');
@@ -107,14 +139,26 @@ export default function Login() {
           <div className="role-selector">
             <button 
               className={`role-btn ${role === 'patient' ? 'active' : ''}`} 
-              onClick={() => setRole('patient')}
+              onClick={() => {
+                setRole('patient');
+                if (mode === 'login') {
+                  setEmail('patient@example.com');
+                  setPassword('patient123');
+                }
+              }}
               disabled={loading}
             >
               Patient
             </button>
             <button 
               className={`role-btn ${role === 'admin' ? 'active' : ''}`} 
-              onClick={() => setRole('admin')}
+              onClick={() => {
+                setRole('admin');
+                if (mode === 'login') {
+                  setEmail('admin@pharmacy.com');
+                  setPassword('admin123');
+                }
+              }}
               disabled={loading}
             >
               Pharmacist
@@ -143,14 +187,28 @@ export default function Login() {
                 </div>
                 <div className="form-group">
                   <label><Smartphone size={16} /> Phone Number (Unique ID)</label>
-                  <input 
-                    type="tel" 
-                    value={phone} 
-                    onChange={(e) => setPhone(e.target.value)} 
-                    required 
-                    placeholder="+971 50 123 4567"
-                    disabled={loading}
-                  />
+                  <div className="phone-input-wrapper">
+                    <select 
+                      className="country-code-select"
+                      value={countryCode} 
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      disabled={loading}
+                    >
+                      <option value="+971">+971 (UAE)</option>
+                      <option value="+1">+1 (US)</option>
+                      <option value="+44">+44 (UK)</option>
+                      <option value="+91">+91 (IN)</option>
+                    </select>
+                    <input 
+                      type="tel" 
+                      value={phone} 
+                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 12))} 
+                      required 
+                      placeholder="123456789012"
+                      disabled={loading}
+                      maxLength={12}
+                    />
+                  </div>
                 </div>
               </>
             )}
@@ -167,14 +225,24 @@ export default function Login() {
             </div>
             <div className="form-group">
               <label><Lock size={16} /> Password</label>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                placeholder={role === 'admin' ? 'admin123' : 'patient123'}
-                required
-                disabled={loading}
-              />
+              <div className="password-input-wrapper">
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  placeholder={role === 'admin' ? 'admin123' : 'patient123'}
+                  required
+                  disabled={loading}
+                />
+                <button 
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             <button type="submit" className="btn btn-primary login-btn" disabled={loading}>
               {loading ? (
@@ -193,7 +261,17 @@ export default function Login() {
           <div className="login-footer">
             <button 
               className="link-btn" 
-              onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
+              onClick={() => {
+                const newMode = mode === 'login' ? 'signup' : 'login';
+                navigate(`/${newMode}`);
+                if (newMode === 'login') {
+                  setEmail(role === 'admin' ? 'admin@pharmacy.com' : 'patient@example.com');
+                  setPassword(role === 'admin' ? 'admin123' : 'patient123');
+                } else {
+                  setEmail('');
+                  setPassword('');
+                }
+              }}
               disabled={loading}
             >
               {mode === 'login' ? (
