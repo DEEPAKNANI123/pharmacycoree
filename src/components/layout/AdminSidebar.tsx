@@ -4,7 +4,7 @@ import {
   ShieldPlus, LayoutDashboard, Bell, Grip, 
   Archive, Clipboard, FileSignature, 
   ThermometerSnowflake, DollarSign, Percent, CheckCircle, LogOut,
-  ShoppingCart, ScanFace, Users, BarChart3, Settings, Pill, Server
+  ShoppingCart, ScanFace, Users, BarChart3, Settings, Pill, Server, TrendingUp
 } from 'lucide-react';
 import { useDatabase } from '../../context/DatabaseContext';
 import './AdminSidebar.css';
@@ -111,6 +111,10 @@ export default function AdminSidebar() {
           <NavLink to="/admin/vat-returns" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
             <Percent size={18} />
             <span>VAT & Returns</span>
+          </NavLink>
+          <NavLink to="/admin/revenue" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
+            <TrendingUp size={18} />
+            <span>Revenue Analytics</span>
           </NavLink>
           <NavLink to="/admin/compliance" className={({isActive}) => `nav-item ${isActive ? 'active' : ''}`}>
             <CheckCircle size={18} />
