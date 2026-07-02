@@ -4,7 +4,7 @@ import {
   ShieldPlus, LayoutDashboard, Bell, Grip, 
   Archive, Clipboard, FileSignature, 
   ThermometerSnowflake, DollarSign, Percent, CheckCircle, LogOut,
-  ShoppingCart, ScanFace, Users, BarChart3, Settings, Pill, Server, TrendingUp
+  ShoppingCart, ScanFace, Users, BarChart3, Settings, Pill, Server, TrendingUp, MapPin
 } from 'lucide-react';
 import { useDatabase } from '../../context/DatabaseContext';
 import './AdminSidebar.css';
@@ -15,7 +15,7 @@ export default function AdminSidebar() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/Signin');
   };
 
   const alertsCount = useMemo(() => {
@@ -52,7 +52,7 @@ export default function AdminSidebar() {
         </div>
         <div>
           <h2 className="brand-title">PharmaCore</h2>
-          <span className="brand-subtitle">Main Branch · Dubai</span>
+          <span className="brand-subtitle"><MapPin size={12} /> Main Branch · Dubai</span>
         </div>
       </div>
 
