@@ -346,7 +346,7 @@ export default function Dashboard() {
         <div className="panel-header">
           <h3>Pharmacy Operations KPIs</h3>
         </div>
-        <div className="kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '1rem' }}>
+        <div className="kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '1rem' }}>
           
           <div className="kpi-card" style={{ padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-secondary)' }}>
              <div className="flex-between">
@@ -421,7 +421,7 @@ export default function Dashboard() {
         <div className="panel-header">
           <h3>Patient & Clinical KPIs</h3>
         </div>
-        <div className="kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '1rem' }}>
+        <div className="kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '1rem' }}>
           
           <div className="kpi-card" style={{ padding: '1.25rem', borderRadius: '12px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-bg-secondary)' }}>
              <div className="flex-between">
