@@ -7,12 +7,12 @@ import './Login.css';
 export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isSignup = location.pathname === '/signup';
+  const isSignup = location.pathname === '/Signup';
   
   const [mode, setMode] = useState<'login' | 'signup'>(isSignup ? 'signup' : 'login');
   
   useEffect(() => {
-    setMode(location.pathname === '/signup' ? 'signup' : 'login');
+    setMode(location.pathname === '/Signup' ? 'signup' : 'login');
   }, [location.pathname]);
 
   const [role, setRole] = useState<'admin' | 'patient'>('patient');
@@ -35,17 +35,17 @@ export default function Login() {
         setError('Name must contain only alphabetical characters');
         return;
       }
-      if (!/^\d{9,12}$/.test(phone)) {
-        setError('Phone number must be between 9 and 12 numeric digits');
+      if (!/^\d{10}$/.test(phone)) {
+        setError('Phone number must be exactly 10 numeric digits');
         return;
       }
       if (!email.toLowerCase().endsWith('@gmail.com')) {
         setError('Email must be in @gmail.com format');
         return;
       }
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_-]).{8,}$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_-]).{8,15}$/;
       if (!passwordRegex.test(password)) {
-        setError('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');
+        setError('Password must be 8-15 characters, with uppercase, lowercase, number, and special character');
         return;
       }
     }
@@ -192,6 +192,12 @@ export default function Login() {
                       className="country-code-select"
                       value={countryCode} 
                       onChange={(e) => setCountryCode(e.target.value)}
+                      onKeyDownCapture={(e) => {
+                        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }
+                      }}
                       disabled={loading}
                     >
                       <option value="+971">+971 (UAE)</option>
@@ -202,11 +208,11 @@ export default function Login() {
                     <input 
                       type="tel" 
                       value={phone} 
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 12))} 
+                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} 
                       required 
-                      placeholder="123456789012"
+                      placeholder="1234567890"
                       disabled={loading}
-                      maxLength={12}
+                      maxLength={10}
                     />
                   </div>
                 </div>
@@ -233,6 +239,7 @@ export default function Login() {
                   placeholder={role === 'admin' ? 'admin123' : 'patient123'}
                   required
                   disabled={loading}
+                  maxLength={15}
                 />
                 <button 
                   type="button"
@@ -263,7 +270,7 @@ export default function Login() {
               className="link-btn" 
               onClick={() => {
                 const newMode = mode === 'login' ? 'signup' : 'login';
-                navigate(`/${newMode}`);
+                navigate(newMode === 'login' ? '/Signin' : '/Signup');
                 if (newMode === 'login') {
                   setEmail(role === 'admin' ? 'admin@pharmacy.com' : 'patient@example.com');
                   setPassword(role === 'admin' ? 'admin123' : 'patient123');
