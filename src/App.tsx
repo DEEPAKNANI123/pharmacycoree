@@ -44,6 +44,7 @@ function PageLoader() {
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
+      width: '100%',
       background: 'var(--color-bg-base)',
       gap: '1.5rem'
     }}>
@@ -76,7 +77,7 @@ function ProtectedRoute({ children, role }: { children: React.ReactNode, role: '
   
   // Native blocking of back button / navigation to login while authenticated
   const blocker = useBlocker(
-    ({ nextLocation }) => currentUser !== null && (nextLocation.pathname === '/login' || nextLocation.pathname === '/')
+    ({ nextLocation }) => currentUser !== null && (nextLocation.pathname === '/Signin' || nextLocation.pathname === '/')
   );
 
   React.useEffect(() => {
@@ -99,7 +100,7 @@ function ProtectedRoute({ children, role }: { children: React.ReactNode, role: '
   }
 
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/Signin" />;
   }
 
   if (currentUser.role !== role) {
@@ -110,9 +111,9 @@ function ProtectedRoute({ children, role }: { children: React.ReactNode, role: '
 }
 
 const router = createBrowserRouter([
-  { path: "/", element: <Navigate to="/login" /> },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Login /> },
+  { path: "/", element: <Navigate to="/Signin" /> },
+  { path: "/Signin", element: <Login /> },
+  { path: "/Signup", element: <Login /> },
   {
     path: "/admin",
     element: <ProtectedRoute role="admin"><AdminLayout /></ProtectedRoute>,
