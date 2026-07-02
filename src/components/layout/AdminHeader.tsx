@@ -152,7 +152,7 @@ export default function AdminHeader({ title = "Dashboard" }: { title?: string })
                 </div>
               </div>
               <div style={{ padding: '0.5rem' }}>
-                <div className="profile-menu-item" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', fontSize: '0.85rem', color: 'var(--color-danger)', cursor: 'pointer', borderRadius: '4px' }} onClick={() => { logout(); navigate('/login'); }}>
+                <div className="profile-menu-item" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', fontSize: '0.85rem', color: 'var(--color-danger)', cursor: 'pointer', borderRadius: '4px' }} onClick={() => { logout(); navigate('/Signin'); }}>
                   <LogOut size={16} /> Sign Out
                 </div>
               </div>
