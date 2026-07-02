@@ -170,6 +170,51 @@ button {
   color: var(--color-text-muted);
 }
 
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-danger); }
+
+/* Metric Cards */
+.metric-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.metric-card {
+  padding: var(--space-5);
+}
+
+.metric-title {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: var(--space-2);
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.metric-subtitle {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.metric-card.panel.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.metric-card.panel.clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--color-primary-light);
+}
+
 input[type="text"], input[type="password"], input[type="email"] {
   font-family: var(--font-family);
   border: 1px solid var(--color-border);
@@ -221,6 +266,12 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
   flex: 1;
   overflow-y: auto;
   padding: var(--space-6);
+}
+
+.admin-page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Modals */
