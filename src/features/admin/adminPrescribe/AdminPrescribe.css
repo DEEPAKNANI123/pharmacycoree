@@ -1,7 +1,4 @@
 .prescribe-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .prescribe-header {
@@ -32,6 +29,9 @@
   border-radius: 16px;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
+}
+
+.admin-prescribe-container {
 }
 
 .patient-info-box {
