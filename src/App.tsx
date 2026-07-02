@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate, useBlocker } from 'react-router-dom';
 import { DatabaseProvider, useDatabase } from './context/DatabaseContext';
 
 // Layouts
@@ -23,6 +23,7 @@ const Customers = lazy(() => import('./features/admin/customers/Customers'));
 const ReportsPage = lazy(() => import('./features/admin/reportsPage/ReportsPage'));
 const SettingsPage = lazy(() => import('./features/admin/settingsPage/SettingsPage'));
 const AdminPrescribe = lazy(() => import('./features/admin/adminPrescribe/AdminPrescribe'));
+const RevenueAnalytics = lazy(() => import('./features/admin/revenue/RevenueAnalytics'));
 
 // Patient Pages (Lazy Loaded)
 const PatientDashboard = lazy(() => import('./features/patient/patientDashboard/PatientDashboard'));
@@ -71,8 +72,28 @@ function PageLoader() {
 }
 
 function ProtectedRoute({ children, role }: { children: React.ReactNode, role: 'admin' | 'patient' }) {
-  const { currentUser, isLoading } = useDatabase();
+  const { currentUser, isLoading, logout } = useDatabase();
   
+  // Native blocking of back button / navigation to login while authenticated
+  const blocker = useBlocker(
+    ({ nextLocation }) => currentUser !== null && (nextLocation.pathname === '/login' || nextLocation.pathname === '/')
+  );
+
+  React.useEffect(() => {
+    if (blocker.state === 'blocked') {
+      // 1. Immediately reset the blocker to revert the URL back to the dashboard
+      blocker.reset();
+      
+      // 2. Show the confirmation dialog asynchronously so the URL has time to revert
+      setTimeout(() => {
+        const confirmLogout = window.confirm("Are you sure you want to sign out?");
+        if (confirmLogout) {
+          logout(); // This clears user state and forces a natural redirect to /login
+        }
+      }, 50);
+    }
+  }, [blocker.state, logout, blocker]);
+
   if (isLoading) {
     return <PageLoader />;
   }
@@ -88,57 +109,55 @@ function ProtectedRoute({ children, role }: { children: React.ReactNode, role: '
   return <>{children}</>;
 }
 
+const router = createBrowserRouter([
+  { path: "/", element: <Navigate to="/login" /> },
+  { path: "/login", element: <Login /> },
+  { path: "/signup", element: <Login /> },
+  {
+    path: "/admin",
+    element: <ProtectedRoute role="admin"><AdminLayout /></ProtectedRoute>,
+    children: [
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "pos", element: <PosSales /> },
+      { path: "inventory", element: <Inventory /> },
+      { path: "alerts", element: <Alerts /> },
+      { path: "rx-validation", element: <RxValidation /> },
+      { path: "procurement", element: <Procurement /> },
+      { path: "grn", element: <GRNReceiving /> },
+      { path: "cold-store", element: <ColdStore /> },
+      { path: "treasury", element: <Treasury /> },
+      { path: "vat-returns", element: <VatReturns /> },
+      { path: "compliance", element: <Compliance /> },
+      { path: "hr-payroll", element: <HrPayroll /> },
+      { path: "customers", element: <Customers /> },
+      { path: "e-prescribe", element: <AdminPrescribe /> },
+      { path: "revenue", element: <RevenueAnalytics /> },
+      { path: "reports", element: <ReportsPage /> },
+      { path: "settings", element: <SettingsPage /> },
+      { path: "*", element: <Navigate to="/admin/dashboard" replace /> }
+    ]
+  },
+  {
+    path: "/patient",
+    element: <ProtectedRoute role="patient"><PatientLayout /></ProtectedRoute>,
+    children: [
+      { path: "dashboard", element: <PatientDashboard /> },
+      { path: "search", element: <PatientSearch /> },
+      { path: "cart", element: <PatientCart /> },
+      { path: "profile", element: <PatientProfile /> },
+      { path: "telehealth", element: <PatientTelehealth /> },
+      { path: "*", element: <Navigate to="/patient/dashboard" replace /> }
+    ]
+  },
+  { path: "*", element: <Navigate to="/login" replace /> }
+]);
+
 function App() {
   return (
     <DatabaseProvider>
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            
-            {/* Admin Routes */}
-            <Route path="/admin" element={
-              <ProtectedRoute role="admin">
-                <AdminLayout />
-              </ProtectedRoute>
-            }>
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="pos" element={<PosSales />} />
-              <Route path="inventory" element={<Inventory />} />
-              <Route path="alerts" element={<Alerts />} />
-              <Route path="rx-validation" element={<RxValidation />} />
-              <Route path="procurement" element={<Procurement />} />
-              <Route path="grn" element={<GRNReceiving />} />
-              <Route path="cold-store" element={<ColdStore />} />
-              <Route path="treasury" element={<Treasury />} />
-              <Route path="vat-returns" element={<VatReturns />} />
-              <Route path="compliance" element={<Compliance />} />
-              <Route path="hr-payroll" element={<HrPayroll />} />
-              <Route path="customers" element={<Customers />} />
-              <Route path="e-prescribe" element={<AdminPrescribe />} />
-              <Route path="reports" element={<ReportsPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
-            </Route>
-
-            {/* Patient Routes */}
-            <Route path="/patient" element={
-              <ProtectedRoute role="patient">
-                <PatientLayout />
-              </ProtectedRoute>
-            }>
-              <Route path="dashboard" element={<PatientDashboard />} />
-              <Route path="search" element={<PatientSearch />} />
-              <Route path="cart" element={<PatientCart />} />
-              <Route path="profile" element={<PatientProfile />} />
-              <Route path="telehealth" element={<PatientTelehealth />} />
-              <Route path="*" element={<Navigate to="/patient/dashboard" replace />} />
-            </Route>
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+      <Suspense fallback={<PageLoader />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </DatabaseProvider>
   );
 }
