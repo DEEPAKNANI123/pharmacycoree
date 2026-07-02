@@ -35,7 +35,12 @@
 
 .brand-subtitle {
   font-size: 0.75rem;
-  color: var(--color-text-light);
+  color: var(--color-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.2rem;
 }
 
 .sidebar-nav {
