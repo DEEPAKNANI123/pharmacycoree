@@ -11,7 +11,7 @@ export default function PatientLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/Signin');
   };
 
   return (
